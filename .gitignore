@@ -1,5 +1,10 @@
 *
 !index.html
+!public
+!public/javascript
+!public/javascript/**
+!public/style
+!public/style/**
 !.gitignore
 !index.js
 !package.json

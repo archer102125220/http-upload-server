@@ -6,13 +6,13 @@ const multer = require("multer");
 
 const app = express();
 
-if (fs.existsSync("./uploads") === false) {
-  fs.mkdirSync("./uploads");
+if (fs.existsSync("./public/uploads") === false) {
+  fs.mkdirSync("./public/uploads");
 }
 
 const storage = multer.diskStorage({
   destination: function (req, file, callback) {
-    callback(null, "./uploads");
+    callback(null, "./public/uploads");
   },
   filename: function (req, file, callback) {
     callback(null, file.originalname);
@@ -21,16 +21,15 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage }).single("upload");
 
 app.use(cors());
-app.use("/comps", express.static(path.join(__dirname, "comps")));
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/index.html");
 });
 
-app.get("/uploadjavatpoint", function (req, res) {
+app.get("/upload-img", function (req, res) {
   const imgList = [];
-  fs.readdirSync(__dirname + "/uploads").forEach((file) => {
+  fs.readdirSync(path.join(__dirname, "public/uploads")).forEach((file) => {
     imgList.push(file);
   });
   res.json(imgList);
@@ -39,13 +38,13 @@ app.post("/upload-img", function (req, res) {
   upload(req, res, function (err) {
     if (err) {
       console.log(err);
-      return res.end("Error uploading file.");
+      return res.status(500).end("Error uploading file.");
     }
     // console.log(req);
     // res.end("File is uploaded successfully!");
     res.json({
       uploaded: true,
-      url: 'http://localhost:2000/uploads/' + req.file.originalname
+      url: 'http://localhost:2000/public/uploads/' + req.file.originalname
     })
   });
 });
