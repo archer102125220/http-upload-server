@@ -1,0 +1,7 @@
+*
+!index.html
+!.gitignore
+!index.js
+!package.json
+!yarn.lock
+!package-lock.json
